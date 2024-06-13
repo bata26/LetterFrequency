@@ -1,9 +1,11 @@
 package it.unipi.hadoop.reducer;
 
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.hadoop.mapreduce.Counter;
+import org.apache.hadoop.mapreduce.Cluster;
+import org.apache.hadoop.mapreduce.Job;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -25,9 +27,10 @@ public class LetterFrequencyReducer extends Reducer<Text, IntWritable, Text, Tex
 
     @Override
     protected void cleanup(Context context) throws IOException, InterruptedException {
-        Counter counter = context.getCounter(LetterFrequencyMapper.LetterCounter.TOTAL_LETTERS);
-        long totalLetters = counter.getValue();
-
+        Configuration conf = context.getConfiguration();
+        Cluster cluster = new Cluster(conf);
+        Job currentJob = cluster.getJob(context.getJobID());
+        long totalLetters = currentJob.getCounters().findCounter(LetterFrequencyMapper.LetterCounter.TOTAL_LETTERS).getValue(); 
         for (Map.Entry<Text, Integer> entry : countMap.entrySet()) {
             Text letter = entry.getKey();
             int count = entry.getValue();
