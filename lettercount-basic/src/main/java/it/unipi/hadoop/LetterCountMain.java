@@ -30,18 +30,21 @@ public class LetterCountMain {
         job.setJarByClass(LetterCountMain.class);
         job.setMapperClass(LetterCountMapper.class);
         job.setReducerClass(LetterCountReducer.class);
-
+        
+        // specify the mapper output format
         job.setMapOutputKeyClass(Text.class);
         job.setMapOutputValueClass(IntWritable.class);
 
+        // specify the reducer output format
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
 
+        // specify the number of reducers
         int numReducers = Integer.parseInt(args[2]);
         job.setNumReduceTasks(numReducers);
 
-        job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(Text.class);
+        //job.setOutputKeyClass(Text.class);
+        //job.setOutputValueClass(Text.class);
 
         FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
         FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]));
