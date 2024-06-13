@@ -13,6 +13,33 @@ import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
+import org.apache.hadoop.mapreduce.Counters;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileStatus;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Counters;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
+
+
+import java.util.HashMap;
+import java.util.Map;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 public class LetterCountMain {
     public static void main(String[] args) throws Exception{
@@ -43,8 +70,6 @@ public class LetterCountMain {
         int numReducers = Integer.parseInt(args[2]);
         job.setNumReduceTasks(numReducers);
 
-        //job.setOutputKeyClass(Text.class);
-        //job.setOutputValueClass(Text.class);
 
         FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
         FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]));
@@ -52,6 +77,42 @@ public class LetterCountMain {
         job.setInputFormatClass(TextInputFormat.class);
         job.setOutputFormatClass(TextOutputFormat.class);
 
-        System.exit(job.waitForCompletion(true) ? 0 : 1);
+        boolean jobCompleted = job.waitForCompletion(true);
+        if (jobCompleted) {
+            Counters counters = job.getCounters();
+            long totalLetters = counters.findCounter(LetterCountMapper.Counters.TOTAL_LETTERS).getValue();
+
+            System.out.println("Total letters: " + totalLetters);
+
+            Path outputPath = new Path(args[1]);
+            FileSystem fs = FileSystem.get(conf);
+            FileStatus[] status = fs.listStatus(outputPath);
+            Map<String, Integer> letterCounts = new HashMap<>();
+
+            for (FileStatus fileStatus : status) {
+                if (fileStatus.getPath().getName().startsWith("part-")) {
+                    FSDataInputStream inputStream = fs.open(fileStatus.getPath());
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        String[] parts = line.split("\t");
+                        String letter = parts[0];
+                        int count = Integer.parseInt(parts[1]);
+                        letterCounts.put(letter, letterCounts.getOrDefault(letter, 0) + count);
+                    }
+
+                    reader.close();
+                }
+            }
+
+            for (Map.Entry<String, Integer> entry : letterCounts.entrySet()) {
+                String letter = entry.getKey();
+                int count = entry.getValue();
+                double frequency = (double) count / totalLetters;
+                System.out.println("Letter: " + letter + ", Frequency: " + frequency);
+            }
+            
+        }
     }
 }

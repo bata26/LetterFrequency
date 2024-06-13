@@ -6,24 +6,30 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class LetterCountMapper extends Mapper<Object, Text, Text, IntWritable> {
 
-
-    private final Text letter = new Text("COUNT");
+    //private final Text letter = new Text("COUNT");
+    private final static IntWritable one = new IntWritable(1);
+    private Text letter = new Text();
+    private Map<Character, Integer> charFrequencyMap = new HashMap<>();
+    public enum Counters {
+        TOTAL_LETTERS
+    }
 
     @Override
     public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
         char[] chars = value.toString().toLowerCase().toCharArray();
 
-        long count = 0;
         for (char c : chars) {
             if (Character.isLetter(c)) {
-                count++;
+                letter.set(Character.toString(c));
+                context.write(letter, one);
+                context.getCounter(Counters.TOTAL_LETTERS).increment(1);
             }
         }
-
-        IntWritable countWritable = new IntWritable((int) count);
-        context.write(letter, countWritable);
     }
-    
+
 }
