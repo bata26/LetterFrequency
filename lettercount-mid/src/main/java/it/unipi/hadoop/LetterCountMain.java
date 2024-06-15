@@ -2,6 +2,7 @@ package it.unipi.hadoop;
 
 import it.unipi.hadoop.mapper.LetterCountMapper;
 import it.unipi.hadoop.reducer.LetterCountReducer;
+import it.unipi.hadoop.combiner.LetterCountCombiner;
 
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.conf.Configuration;
@@ -53,9 +54,10 @@ public class LetterCountMain {
         System.out.println("args[1]: <output>=" + otherArgs[1]);
         System.out.println("args[2]: <reduce_task>=" + otherArgs[2]);
 
-        Job job = Job.getInstance(conf, "lettercount-basic");
+        Job job = Job.getInstance(conf, "lettercount-mid");
         job.setJarByClass(LetterCountMain.class);
         job.setMapperClass(LetterCountMapper.class);
+        job.setCombinerClass(LetterCountCombiner.class);
         job.setReducerClass(LetterCountReducer.class);
         
         // specify the mapper output format

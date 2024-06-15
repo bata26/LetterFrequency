@@ -1,0 +1,31 @@
+package it.unipi.hadoop.mapper;
+
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Mapper;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+
+public class LetterFrequencyMapper extends Mapper<Object, Text, Text, IntWritable> {
+
+    private Map<Character, Integer> charFrequencyMap = new HashMap<>();
+
+    @Override
+    protected void map(Object key, Text value, Context context) throws IOException, InterruptedException {
+        char[] chars = value.toString().toLowerCase().toCharArray();
+
+         for (char c : chars) {
+            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
+                charFrequencyMap.put(c, charFrequencyMap.getOrDefault(c, 0) + 1);
+            }
+        }
+
+        // Emit each entry in the charFrequencyMap
+        for (Map.Entry<Character, Integer> entry : charFrequencyMap.entrySet()) {
+            context.write(new Text(entry.getKey().toString()), new IntWritable(entry.getValue()));
+        }
+    }
+}

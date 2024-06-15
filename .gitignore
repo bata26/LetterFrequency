@@ -4,5 +4,4 @@ target/
 .vscode
 bin/*
 **/bin/*
-#target/
 *.txt

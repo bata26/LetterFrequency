@@ -11,7 +11,6 @@ import java.util.Map;
 
 public class LetterCountMapper extends Mapper<Object, Text, Text, IntWritable> {
 
-    //private final Text letter = new Text("COUNT");
     private final static IntWritable one = new IntWritable(1);
     private Text letter = new Text();
     private Map<Character, Integer> charFrequencyMap = new HashMap<>();
@@ -24,10 +23,10 @@ public class LetterCountMapper extends Mapper<Object, Text, Text, IntWritable> {
         char[] chars = value.toString().toLowerCase().toCharArray();
 
         for (char c : chars) {
-            if (Character.isLetter(c)) {
+            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
                 letter.set(Character.toString(c));
                 context.write(letter, one);
-                context.getCounter(Counters.TOTAL_LETTERS).increment(1);
+                context.getCounter(LetterCountMapper.Counters.TOTAL_LETTERS).increment(1);
             }
         }
     }
