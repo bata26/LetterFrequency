@@ -16,14 +16,13 @@ public class LetterFrequencyMapper extends Mapper<Object, Text, Text, IntWritabl
 
     @Override
     public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
-        String line = value.toString().toLowerCase().trim();
-        if (!line.isEmpty()) {
-            for (char ch : line.toCharArray()) {
-                if (Character.isLetter(ch)) {
-                    letter.set(Character.toString(ch));
-                    context.write(letter, one);
-                    context.getCounter(LetterCounter.TOTAL_LETTERS).increment(1);
-                }
+        char[] chars = value.toString().toLowerCase().toCharArray();
+
+        for (char c : chars) {
+            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
+                letter.set(Character.toString(c));
+                context.write(letter, one);
+                context.getCounter(LetterCounter.TOTAL_LETTERS).increment(1);
             }
         }
     }
