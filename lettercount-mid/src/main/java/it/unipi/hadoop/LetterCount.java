@@ -42,12 +42,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-public class LetterCountMain {
+public class LetterCount {
     public static void main(String[] args) throws Exception{
         Configuration conf = new Configuration();
         String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
         if (otherArgs.length != 3) {
-           System.err.println("Usage: LetterCountMain <input> <output> <reduce_task");
+           System.err.println("Usage: LetterCount <input> <output> <reduce_task");
            System.exit(1);
         }
         System.out.println("args[0]: <input>="  + otherArgs[0]);
@@ -55,7 +55,7 @@ public class LetterCountMain {
         System.out.println("args[2]: <reduce_task>=" + otherArgs[2]);
 
         Job job = Job.getInstance(conf, "lettercount-mid");
-        job.setJarByClass(LetterCountMain.class);
+        job.setJarByClass(LetterCount.class);
         job.setMapperClass(LetterCountMapper.class);
         job.setCombinerClass(LetterCountCombiner.class);
         job.setReducerClass(LetterCountReducer.class);
