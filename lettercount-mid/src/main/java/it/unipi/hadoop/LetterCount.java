@@ -16,31 +16,16 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 import org.apache.hadoop.mapreduce.Counters;
 
-import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.FSDataInputStream;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Counters;
-import org.apache.hadoop.mapreduce.Job;
-import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
-
-
-import java.util.HashMap;
-import java.util.Map;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
 
 public class LetterCount {
     public static void main(String[] args) throws Exception{
@@ -79,7 +64,18 @@ public class LetterCount {
         job.setInputFormatClass(TextInputFormat.class);
         job.setOutputFormatClass(TextOutputFormat.class);
 
+        double startTime = System.nanoTime();
         boolean jobCompleted = job.waitForCompletion(true);
+        Double executionTime = (System.nanoTime() - startTime) / 1000000000.0;
+        byte[] str = executionTime.toString().getBytes();
+        java.nio.file.Path dirPath = Paths.get(".","timing");
+        if (!Files.exists(dirPath)){
+            Files.createDirectory(dirPath);
+        };
+        java.nio.file.Path filePath = Paths.get(".","timing", otherArgs[1] + ".txt");
+        Files.createFile(filePath);
+        Files.write(filePath, str);
+
         if (jobCompleted) {
             Counters counters = job.getCounters();
             long totalLetters = counters.findCounter(LetterCountMapper.Counters.TOTAL_LETTERS).getValue();

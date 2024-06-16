@@ -8,9 +8,6 @@ import org.apache.hadoop.mapreduce.Cluster;
 import org.apache.hadoop.mapreduce.Job;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 import it.unipi.hadoop.mapper.*;
 
 public class LetterFrequencyReducer extends Reducer<Text, IntWritable, Text, Text> {

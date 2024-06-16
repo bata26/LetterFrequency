@@ -1,17 +1,10 @@
 package it.unipi.hadoop.reducer;
 
-import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.hadoop.mapreduce.Cluster;
-import org.apache.hadoop.mapreduce.Job;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
-import it.unipi.hadoop.mapper.*;
 
 public class LetterFrequencyReducer extends Reducer<Text, IntWritable, Text, Text> {
     private long totalLetters;

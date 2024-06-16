@@ -2,8 +2,10 @@ package it.unipi.hadoop;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import org.apache.hadoop.fs.FileSystem;
+import java.nio.file.Paths;
+import java.nio.file.Files;
 
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
@@ -11,20 +13,8 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileStatus;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Job;
-import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import it.unipi.hadoop.mapper.*;
 import it.unipi.hadoop.reducer.*;
@@ -104,6 +94,20 @@ public class LetterCount {
 
         freqJob.setNumReduceTasks(numReducers);
 
-        System.exit(freqJob.waitForCompletion(true) ? 0 : 1);
+        double startTime = System.nanoTime();
+        int exitStatus = freqJob.waitForCompletion(true) ? 0 : 1;
+        Double executionTime = (System.nanoTime() - startTime) / 1000000000.0;
+        byte[] str = executionTime.toString().getBytes();
+        java.nio.file.Path dirPath = Paths.get(".","timing");
+        if (!Files.exists(dirPath)){
+            Files.createDirectory(dirPath);
+        };
+        java.nio.file.Path filePath = Paths.get(".","timing", args[1] + ".txt");
+        Files.createFile(filePath);
+        Files.write(filePath, str);
+
+        if (exitStatus == 1) {
+            System.exit(1);
+        }
     }
 }

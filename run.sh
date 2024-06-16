@@ -23,7 +23,7 @@ for ver in ${versions[@]};
     do 
     for num in ${reducers[@]}; 
         do
-        hadoop jar ./lettercount-${ver}/target/lettercount-${ver}-1.0-SNAPSHOT.jar it.unipi.hadoop.LetterCount ${file} results/${ver} ${num};
+        hadoop jar ./lettercount-${ver}/target/lettercount-${ver}-1.0-SNAPSHOT.jar it.unipi.hadoop.LetterCount ${file} results/${ver}/${file}/${num} ${num};
         sleep 300; # Wait 5 min. to let all containers finish (60sec x 5)
         done; 
     done;

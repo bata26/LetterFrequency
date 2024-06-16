@@ -6,14 +6,10 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class LetterCountMapper extends Mapper<Object, Text, Text, IntWritable> {
 
     private final static IntWritable one = new IntWritable(1);
     private Text letter = new Text();
-    private Map<Character, Integer> charFrequencyMap = new HashMap<>();
     public enum Counters {
         TOTAL_LETTERS
     }

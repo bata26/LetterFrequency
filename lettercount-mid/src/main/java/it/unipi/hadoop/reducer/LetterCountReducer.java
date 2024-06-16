@@ -8,8 +8,6 @@ import java.io.IOException;
 
 public class LetterCountReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
 
-    private final IntWritable result = new IntWritable();
-
     @Override
     public void reduce(Text key, Iterable<IntWritable> values, Context context)
             throws IOException, InterruptedException {
