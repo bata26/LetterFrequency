@@ -33,11 +33,11 @@ def main():
 
     global num_letters, letter_frequency
 
-    with open("input.txt", "r") as file:
+    with open(sys.argv[1], "r") as file:
         lines = file.readlines()
     
     threads = []
-    n = int(sys.argv[1])
+    n = int(sys.argv[2])
     chunk_size = len(lines) // n
 
     for i in range(n):
