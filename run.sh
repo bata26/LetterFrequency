@@ -7,14 +7,14 @@
 #hadoop fs -put 4_GB.txt /user/hadoop/4_GB.txt
 #hadoop fs -put 5_GB.txt /user/hadoop/5_GB.txt
 
-#sudo mvn -f lettercount-naive clean package
-#sudo mvn -f lettercount-mid clean package
-#sudo mvn -f lettercount-opt clean package
+sudo mvn -f lettercount-naive clean package
+sudo mvn -f lettercount-mid clean package
+sudo mvn -f lettercount-opt clean package
 
 # ↑↑↑ Uncomment only on the first execution ↑↑↑
 
-files=(50_MB.txt 250_MB.txt 500_MB.txt 1_GB.txt 2_GB.txt 3_GB.txt 4_GB.txt 5_GB.txt)
-versions=(naive mid opt)
+files=(moby_EN.txt moby_FR.txt moby_IT.txt)
+versions=(opt)
 reducers=(1 7 13 20 26)
 
 for file in ${files[@]}; 

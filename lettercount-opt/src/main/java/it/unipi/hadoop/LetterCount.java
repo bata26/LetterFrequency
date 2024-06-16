@@ -2,8 +2,10 @@ package it.unipi.hadoop;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
@@ -32,6 +34,11 @@ public class LetterCount {
         job.setOutputValueClass(IntWritable.class);
 
         FileInputFormat.addInputPath(job, new Path(args[0]));
+
+        FileSystem hdfs = FileSystem.get(conf);
+        org.apache.hadoop.fs.Path path = new Path(args[1]);
+        if (hdfs.exists(path))
+          hdfs.delete(path, true);
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
         
         int numReducers = Integer.parseInt(args[2]);
@@ -40,14 +47,15 @@ public class LetterCount {
         double startTime = System.nanoTime();
         int exitStatus = job.waitForCompletion(true) ? 0 : 1;
         Double executionTime = (System.nanoTime() - startTime) / 1000000000.0;
-        byte[] str = executionTime.toString().getBytes();
-        java.nio.file.Path dirPath = Paths.get(".","timing");
-        if (!Files.exists(dirPath)){
-            Files.createDirectory(dirPath);
-        };
-        java.nio.file.Path filePath = Paths.get(".","timing", args[1] + ".txt");
-        Files.createFile(filePath);
-        Files.write(filePath, str);
+        byte[] executionTimeStr = executionTime.toString().getBytes();
+        java.nio.file.Path dirPath = Paths.get(".", "timing", args[1]);
+        if (!Files.exists(dirPath)) {
+            Files.createDirectories(dirPath);
+        }
+        
+        // File path for the specific timing result
+        java.nio.file.Path filePath = Paths.get(".", "timing", args[1] + "/result.txt");
+        Files.write(filePath, executionTimeStr, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
         if (exitStatus == 1) {
             System.exit(1);
