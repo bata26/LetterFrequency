@@ -3,6 +3,7 @@ package it.unipi.hadoop;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.nio.file.Files;
 
 import org.apache.hadoop.fs.FileSystem;
@@ -22,8 +23,8 @@ import it.unipi.hadoop.combiner.*;
 
 public class LetterCount {
     public static void main(String[] args) throws Exception {
-        if (args.length != 4) {
-            System.err.println("Usage: LetterFrequencyDriver <input path> <output path count> <output path frequency> <number of reducers>");
+        if (args.length != 3) {
+            System.err.println("Usage: LetterFrequencyDriver <input path> <output path> <number of reducers>");
             System.exit(-1);
         }
 
@@ -38,11 +39,17 @@ public class LetterCount {
         countJob.setOutputValueClass(IntWritable.class);
 
         FileInputFormat.addInputPath(countJob, new Path(args[0]));
-        FileOutputFormat.setOutputPath(countJob, new Path(args[1]));
+        FileSystem hdfs = FileSystem.get(conf);
+        org.apache.hadoop.fs.Path path = new Path(args[1]+"/countTotalLetters");
+        if (hdfs.exists(path))
+          hdfs.delete(path, true);
+     
+        FileOutputFormat.setOutputPath(countJob, new Path(args[1]+"/countTotalLetters"));
 
-        int numReducers = Integer.parseInt(args[3]);
+        int numReducers = Integer.parseInt(args[2]);
         countJob.setNumReduceTasks(numReducers);
-
+        // starting time set for the first job
+        double startTime = System.nanoTime();
         int countStatus = countJob.waitForCompletion(true) ? 0 : 1;
 
         if (countStatus == 1) {
@@ -50,7 +57,7 @@ public class LetterCount {
         }
 
         // Read the total letters count from the output of the first job
-        Path countOutputPath = new Path(args[1]);
+        Path countOutputPath = new Path(args[1]+"/countTotalLetters");
         FileSystem fs = FileSystem.get(conf);
         FileStatus[] status = fs.listStatus(countOutputPath);
 
@@ -90,21 +97,27 @@ public class LetterCount {
         freqJob.setOutputValueClass(IntWritable.class);
 
         FileInputFormat.addInputPath(freqJob, new Path(args[0]));
+
+        org.apache.hadoop.fs.Path path2 = new Path(args[2]);
+        if (hdfs.exists(path2))
+          hdfs.delete(path2, true);
+     
         FileOutputFormat.setOutputPath(freqJob, new Path(args[2])); // Output path for frequency results
 
         freqJob.setNumReduceTasks(numReducers);
 
-        double startTime = System.nanoTime();
         int exitStatus = freqJob.waitForCompletion(true) ? 0 : 1;
         Double executionTime = (System.nanoTime() - startTime) / 1000000000.0;
-        byte[] str = executionTime.toString().getBytes();
-        java.nio.file.Path dirPath = Paths.get(".","timing");
-        if (!Files.exists(dirPath)){
-            Files.createDirectory(dirPath);
-        };
-        java.nio.file.Path filePath = Paths.get(".","timing", args[1] + ".txt");
-        Files.createFile(filePath);
-        Files.write(filePath, str);
+        byte[] executionTimeStr = executionTime.toString().getBytes();
+        java.nio.file.Path dirPath = Paths.get(".", "timing", args[1]);
+        if (!Files.exists(dirPath)) {
+            Files.createDirectories(dirPath);
+        }
+        
+        // File path for the specific timing result
+        java.nio.file.Path filePath = Paths.get(".", "timing", args[1] + "/result.txt");
+        Files.write(filePath, executionTimeStr, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+
 
         if (exitStatus == 1) {
             System.exit(1);

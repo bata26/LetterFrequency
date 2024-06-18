@@ -5,19 +5,13 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class LetterFrequencyMapper extends Mapper<Object, Text, Text, IntWritable> {
-    private static Map<String, Integer> countLetters;
+    private final static IntWritable one = new IntWritable(1);
+    private Text letter = new Text();
+
     public enum LetterCounter {
         TOTAL_LETTERS
-    }
-
-    @Override
-    protected void setup(Context context) throws IOException, InterruptedException {
-        super.setup(context);
-        countLetters = new HashMap<>();
     }
 
     @Override
@@ -26,17 +20,10 @@ public class LetterFrequencyMapper extends Mapper<Object, Text, Text, IntWritabl
 
         for (char c : chars) {
             if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
-                countLetters.put(Character.toString(c), 1);
+                letter.set(Character.toString(c));
+                context.write(letter, one);
                 context.getCounter(LetterCounter.TOTAL_LETTERS).increment(1);
             }
-        }
-    }
-
-
-    @Override
-    public void cleanup(Context context) throws IOException, InterruptedException {
-        for (Map.Entry<String, Integer> entry : countLetters.entrySet()) {
-            context.write(new Text(entry.getKey()), new IntWritable(entry.getValue()));
         }
     }
 }

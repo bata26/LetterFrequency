@@ -28,6 +28,7 @@ public class LetterCount {
         Job job = Job.getInstance(conf, "letter frequency count");
         job.setJarByClass(LetterCount.class);
         job.setMapperClass(LetterFrequencyMapper.class);
+        job.setCombinerClass(LetterFrequencyCombiner.class);
         job.setReducerClass(LetterFrequencyReducer.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);

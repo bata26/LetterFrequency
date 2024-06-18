@@ -19,11 +19,15 @@ import org.apache.hadoop.mapreduce.Counters;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.hadoop.fs.FSDataOutputStream;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,6 +63,10 @@ public class LetterCount {
 
 
         FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
+        FileSystem hdfs = FileSystem.get(conf);
+        org.apache.hadoop.fs.Path path = new Path(otherArgs[1]);
+        if (hdfs.exists(path))
+          hdfs.delete(path, true);
         FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]));
 
         job.setInputFormatClass(TextInputFormat.class);
@@ -66,16 +74,7 @@ public class LetterCount {
 
         double startTime = System.nanoTime();
         boolean jobCompleted = job.waitForCompletion(true);
-        Double executionTime = (System.nanoTime() - startTime) / 1000000000.0;
-        byte[] str = executionTime.toString().getBytes();
-        java.nio.file.Path dirPath = Paths.get(".","timing");
-        if (!Files.exists(dirPath)){
-            Files.createDirectory(dirPath);
-        };
-        java.nio.file.Path filePath = Paths.get(".","timing", otherArgs[1] + ".txt");
-        Files.createFile(filePath);
-        Files.write(filePath, str);
-
+        
         if (jobCompleted) {
             Counters counters = job.getCounters();
             long totalLetters = counters.findCounter(LetterCountMapper.Counters.TOTAL_LETTERS).getValue();
@@ -104,13 +103,30 @@ public class LetterCount {
                 }
             }
 
+            org.apache.hadoop.fs.Path pathFreq = new Path(otherArgs[1]);
+            if (hdfs.exists(path))
+                hdfs.delete(path, true);
+            FSDataOutputStream outputStream = fs.create(pathFreq);
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
             for (Map.Entry<String, Integer> entry : letterCounts.entrySet()) {
                 String letter = entry.getKey();
                 int count = entry.getValue();
                 double frequency = (double) count / totalLetters;
-                System.out.println("Letter: " + letter + ", Frequency: " + frequency);
+                writer.write(letter + frequency);
+                writer.newLine();
             }
-            
+            // calculate execution time
+            Double executionTime = (System.nanoTime() - startTime) / 1000000000.0;
+            byte[] executionTimeStr = executionTime.toString().getBytes();
+            java.nio.file.Path dirPath = Paths.get(".", "timing", args[1]);
+            if (!Files.exists(dirPath)) {
+                Files.createDirectories(dirPath);
+            }
+
+            // File path for the specific timing result
+            java.nio.file.Path filePath = Paths.get(".", "timing", args[1] + "/result.txt");
+            Files.write(filePath, executionTimeStr, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+
         }
     }
 }
