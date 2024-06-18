@@ -1,10 +1,10 @@
 package it.unipi.hadoop.mapper;
 
+import java.io.IOException;
+
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
-
-import java.io.IOException;
 
 public class LetterCountMapper extends Mapper<Object, Text, Text, IntWritable> {
     private Text count = new Text("TOTAL");
@@ -15,7 +15,7 @@ public class LetterCountMapper extends Mapper<Object, Text, Text, IntWritable> {
         
         long counter = 0;
         for (char c : chars) {
-            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
+            if (c >= 'a' && c <= 'z') {
                 counter++;
             }
         }

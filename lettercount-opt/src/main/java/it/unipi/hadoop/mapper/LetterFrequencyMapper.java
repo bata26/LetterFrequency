@@ -1,12 +1,12 @@
 package it.unipi.hadoop.mapper;
 
-import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Mapper;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Mapper;
 
 public class LetterFrequencyMapper extends Mapper<Object, Text, Text, IntWritable> {
     private static Map<String, Integer> countLetters;
@@ -25,7 +25,7 @@ public class LetterFrequencyMapper extends Mapper<Object, Text, Text, IntWritabl
         char[] chars = value.toString().toLowerCase().toCharArray();
 
         for (char c : chars) {
-            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
+            if (c >= 'a' && c <= 'z') {
                 countLetters.put(Character.toString(c), 1);
                 context.getCounter(LetterCounter.TOTAL_LETTERS).increment(1);
             }

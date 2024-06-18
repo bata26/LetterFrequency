@@ -19,7 +19,7 @@ public class LetterCountMapper extends Mapper<Object, Text, Text, IntWritable> {
         char[] chars = value.toString().toLowerCase().toCharArray();
 
         for (char c : chars) {
-            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
+            if (c >= 'a' && c <= 'z') {
                 letter.set(Character.toString(c));
                 context.write(letter, one);
                 context.getCounter(LetterCountMapper.Counters.TOTAL_LETTERS).increment(1);
