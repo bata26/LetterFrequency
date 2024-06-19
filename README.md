@@ -22,21 +22,18 @@ Simply execute ```./run.sh```
 
 ToDo: 
 
-- [ ] Add double pipeline
-- [ ] Add Time measurements
+- [x] Add double pipeline
+- [x] Add Time measurements
 - [ ] Refactoring 
-- [ ] Find a 50 MB file for Italian, French, English
-- [ ] Create Bash script
+- [x] Find a 50 MB file for Italian, French, English
+- [x] Create Bash script
 - [ ] Create charts and data analysis
 
 ### File dimension test
 50 MB
-250 MB
 500 MB
 1 GB
-2 GB
 3 GB
-4 GB
 5 GB
 
 ### Reducer Number
