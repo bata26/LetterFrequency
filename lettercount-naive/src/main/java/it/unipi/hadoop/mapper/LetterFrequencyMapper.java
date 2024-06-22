@@ -17,9 +17,9 @@ public class LetterFrequencyMapper extends Mapper<Object, Text, Text, IntWritabl
     protected void map(Object key, Text value, Context context) throws IOException, InterruptedException {
         char[] chars = value.toString().toLowerCase().toCharArray();
 
-         for (char c : chars) {
+        for (char c : chars) {
             if (c >= 'a' && c <= 'z') {
-                charFrequencyMap.put(c, charFrequencyMap.getOrDefault(c, 0) + 1);
+                charFrequencyMap.put(c, charFrequencyMap.getOrDefault(c, 1) + 1);
             }
         }
 

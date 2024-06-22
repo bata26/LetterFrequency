@@ -16,6 +16,7 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileStatus;
+import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 
 import it.unipi.hadoop.mapper.*;
 import it.unipi.hadoop.reducer.*;
@@ -35,6 +36,7 @@ public class LetterCount {
         countJob.setCombinerClass(LetterCountCombiner.class);
         countJob.setReducerClass(LetterCountReducer.class);
 
+        countJob.setInputFormatClass(TextInputFormat.class);
         countJob.setOutputKeyClass(Text.class);
         countJob.setOutputValueClass(IntWritable.class);
 
