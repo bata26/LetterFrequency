@@ -5,9 +5,9 @@ mvn -f lettercount-naive clean package
 mvn -f lettercount-opt clean package
 mvn -f lettercount-opt-combiner clean package
 
-files=(IT_3GB.txt)
+files=(IT_1GB.txt)
 versions=(naive)
-reducers=(13 20 26)
+reducers=(26)
 
 for file in ${files[@]}; do
     for ver in ${versions[@]}; do
