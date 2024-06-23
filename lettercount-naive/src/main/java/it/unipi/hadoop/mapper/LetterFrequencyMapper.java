@@ -10,21 +10,30 @@ import org.apache.hadoop.mapreduce.Mapper;
 
 
 public class LetterFrequencyMapper extends Mapper<Object, Text, Text, IntWritable> {
+    private static Map<Character, Integer> countLetters;
 
-    private Map<Character, Integer> charFrequencyMap = new HashMap<>();
 
     @Override
-    protected void map(Object key, Text value, Context context) throws IOException, InterruptedException {
+    protected void setup(Context context) throws IOException, InterruptedException {
+        super.setup(context);
+        countLetters = new HashMap<>();
+    }
+
+    @Override
+    public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
         char[] chars = value.toString().toLowerCase().toCharArray();
 
         for (char c : chars) {
             if (c >= 'a' && c <= 'z') {
-                charFrequencyMap.put(c, charFrequencyMap.getOrDefault(c, 1) + 1);
+                countLetters.put(c, countLetters.getOrDefault(c, 1) + 1);
             }
         }
+    }
 
-        // Emit each entry in the charFrequencyMap
-        for (Map.Entry<Character, Integer> entry : charFrequencyMap.entrySet()) {
+
+    @Override
+    public void cleanup(Context context) throws IOException, InterruptedException {
+        for (Map.Entry<Character, Integer> entry : countLetters.entrySet()) {
             context.write(new Text(entry.getKey().toString()), new IntWritable(entry.getValue()));
         }
     }
