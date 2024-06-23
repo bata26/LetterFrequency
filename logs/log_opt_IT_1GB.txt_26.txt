@@ -111,3 +111,116 @@
 	File Output Format Counters 
 		Bytes Written=264
 waiting for killing container....
+2024-06-22 20:17:52,897 INFO client.RMProxy: Connecting to ResourceManager at hadoop-namenode/10.1.1.82:8032
+2024-06-22 20:17:53,455 WARN mapreduce.JobResourceUploader: Hadoop command-line option parsing not performed. Implement the Tool interface and execute your application with ToolRunner to remedy this.
+2024-06-22 20:17:53,471 INFO mapreduce.JobResourceUploader: Disabling Erasure Coding for path: /tmp/hadoop-yarn/staging/hadoop/.staging/job_1719058826195_0042
+2024-06-22 20:17:53,578 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+2024-06-22 20:17:53,746 INFO input.FileInputFormat: Total input files to process : 1
+2024-06-22 20:17:53,786 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+2024-06-22 20:17:53,840 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+2024-06-22 20:17:53,861 INFO mapreduce.JobSubmitter: number of splits:8
+2024-06-22 20:17:54,023 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+2024-06-22 20:17:54,053 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1719058826195_0042
+2024-06-22 20:17:54,054 INFO mapreduce.JobSubmitter: Executing with tokens: []
+2024-06-22 20:17:54,244 INFO conf.Configuration: resource-types.xml not found
+2024-06-22 20:17:54,245 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.
+2024-06-22 20:17:54,315 INFO impl.YarnClientImpl: Submitted application application_1719058826195_0042
+2024-06-22 20:17:54,364 INFO mapreduce.Job: The url to track the job: http://hadoop-namenode:8088/proxy/application_1719058826195_0042/
+2024-06-22 20:17:54,364 INFO mapreduce.Job: Running job: job_1719058826195_0042
+2024-06-22 20:18:01,716 INFO mapreduce.Job: Job job_1719058826195_0042 running in uber mode : false
+2024-06-22 20:18:01,720 INFO mapreduce.Job:  map 0% reduce 0%
+2024-06-22 20:18:19,065 INFO mapreduce.Job:  map 13% reduce 0%
+2024-06-22 20:18:20,076 INFO mapreduce.Job:  map 25% reduce 0%
+2024-06-22 20:18:30,182 INFO mapreduce.Job:  map 42% reduce 0%
+2024-06-22 20:18:36,234 INFO mapreduce.Job:  map 52% reduce 0%
+2024-06-22 20:18:42,309 INFO mapreduce.Job:  map 60% reduce 1%
+2024-06-22 20:18:43,317 INFO mapreduce.Job:  map 61% reduce 1%
+2024-06-22 20:18:48,381 INFO mapreduce.Job:  map 69% reduce 1%
+2024-06-22 20:18:49,388 INFO mapreduce.Job:  map 71% reduce 1%
+2024-06-22 20:18:50,415 INFO mapreduce.Job:  map 85% reduce 1%
+2024-06-22 20:18:51,424 INFO mapreduce.Job:  map 95% reduce 2%
+2024-06-22 20:18:52,450 INFO mapreduce.Job:  map 100% reduce 2%
+2024-06-22 20:18:54,469 INFO mapreduce.Job:  map 100% reduce 8%
+2024-06-22 20:18:55,481 INFO mapreduce.Job:  map 100% reduce 15%
+2024-06-22 20:19:05,584 INFO mapreduce.Job:  map 100% reduce 19%
+2024-06-22 20:19:07,595 INFO mapreduce.Job:  map 100% reduce 23%
+2024-06-22 20:19:08,609 INFO mapreduce.Job:  map 100% reduce 27%
+2024-06-22 20:19:09,615 INFO mapreduce.Job:  map 100% reduce 35%
+2024-06-22 20:19:10,629 INFO mapreduce.Job:  map 100% reduce 46%
+2024-06-22 20:19:11,636 INFO mapreduce.Job:  map 100% reduce 54%
+2024-06-22 20:19:19,706 INFO mapreduce.Job:  map 100% reduce 58%
+2024-06-22 20:19:21,765 INFO mapreduce.Job:  map 100% reduce 62%
+2024-06-22 20:19:23,781 INFO mapreduce.Job:  map 100% reduce 65%
+2024-06-22 20:19:24,786 INFO mapreduce.Job:  map 100% reduce 69%
+2024-06-22 20:19:26,799 INFO mapreduce.Job:  map 100% reduce 77%
+2024-06-22 20:19:27,819 INFO mapreduce.Job:  map 100% reduce 81%
+2024-06-22 20:19:28,825 INFO mapreduce.Job:  map 100% reduce 92%
+2024-06-22 20:19:29,833 INFO mapreduce.Job:  map 100% reduce 96%
+2024-06-22 20:19:30,844 INFO mapreduce.Job:  map 100% reduce 100%
+2024-06-22 20:19:30,859 INFO mapreduce.Job: Job job_1719058826195_0042 completed successfully
+2024-06-22 20:19:30,952 INFO mapreduce.Job: Counters: 57
+	File System Counters
+		FILE: Number of bytes read=1692
+		FILE: Number of bytes written=7407250
+		FILE: Number of read operations=0
+		FILE: Number of large read operations=0
+		FILE: Number of write operations=0
+		HDFS: Number of bytes read=1073771416
+		HDFS: Number of bytes written=264
+		HDFS: Number of read operations=154
+		HDFS: Number of large read operations=0
+		HDFS: Number of write operations=52
+	Job Counters 
+		Killed map tasks=1
+		Killed reduce tasks=1
+		Launched map tasks=8
+		Launched reduce tasks=27
+		Data-local map tasks=7
+		Rack-local map tasks=1
+		Total time spent by all maps in occupied slots (ms)=616160
+		Total time spent by all reduces in occupied slots (ms)=897808
+		Total time spent by all map tasks (ms)=308080
+		Total time spent by all reduce tasks (ms)=448904
+		Total vcore-milliseconds taken by all map tasks=308080
+		Total vcore-milliseconds taken by all reduce tasks=448904
+		Total megabyte-milliseconds taken by all map tasks=78868480
+		Total megabyte-milliseconds taken by all reduce tasks=114919424
+	Map-Reduce Framework
+		Map input records=6516199
+		Map output records=192
+		Map output bytes=1152
+		Map output materialized bytes=2784
+		Input split bytes=920
+		Combine input records=0
+		Combine output records=0
+		Reduce input groups=24
+		Reduce shuffle bytes=2784
+		Reduce input records=192
+		Reduce output records=24
+		Spilled Records=384
+		Shuffled Maps =208
+		Failed Shuffles=0
+		Merged Map outputs=208
+		GC time elapsed (ms)=17943
+		CPU time spent (ms)=129380
+		Physical memory (bytes) snapshot=7028752384
+		Virtual memory (bytes) snapshot=63985905664
+		Total committed heap usage (bytes)=4697096192
+		Peak Map Physical memory (bytes)=276402176
+		Peak Map Virtual memory (bytes)=1868308480
+		Peak Reduce Physical memory (bytes)=199180288
+		Peak Reduce Virtual memory (bytes)=1899134976
+	Shuffle Errors
+		BAD_ID=0
+		CONNECTION=0
+		IO_ERROR=0
+		WRONG_LENGTH=0
+		WRONG_MAP=0
+		WRONG_REDUCE=0
+	it.unipi.hadoop.mapper.LetterFrequencyMapper$LetterCounter
+		TOTAL_LETTERS=854654573
+	File Input Format Counters 
+		Bytes Read=1073770496
+	File Output Format Counters 
+		Bytes Written=264
+waiting for killing container....
