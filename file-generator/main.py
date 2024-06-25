@@ -31,7 +31,7 @@ def repeat_content_until_size(input_file, output_file, target_size):
     return None
 
 def main():
-    dimensions = [50, 500, 1, 3]
+    dimensions = [50, 500, 1, 3, 10]
     languages = ["IT"]
     for lang in languages:
         input_file = f"moby_{lang}.txt"
@@ -49,4 +49,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
